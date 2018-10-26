@@ -1,0 +1,6 @@
+
+
+This folder contains plugins:
+
++ Mytheme Use Shortcode Widget Plugin
+--> allow use shortcode or php in widget
