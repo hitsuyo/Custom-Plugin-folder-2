@@ -13,7 +13,7 @@ function allow_use_shortcode_or_php_in_widget($html)
      }
      return $html;
 }
-add_action( 'init', 'myPost_custom_init' ); // important to activate plugin
+add_action( 'init', 'allow_use_shortcode_or_php_in_widget' ); // important to activate plugin
 
 
 // Enable shortcodes in widgets
