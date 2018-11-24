@@ -4,3 +4,6 @@ This folder contains plugins:
 
 + Mytheme Use Shortcode Widget Plugin
 --> allow use shortcode or php in widget
+
++ Mytheme Contact Form Ajax Froyo Plugin
+	24-11-2018
