@@ -33,7 +33,7 @@ function mcfp_ajax_fy_Add_My_Admin_Link()
   // add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function = '', $icon_url = '', $position = null );
   add_menu_page(
         'My First Page', // Title of the page
-        'Mytheme Contact Form Plugin - Donut', // Text to show on the menu link
+        'Mytheme Contact Form Plugin - Ajax Froyo', // Text to show on the menu link
         'manage_options', // Capability requirement to see the link
         'includes/mcfp-ajax-fy-first-acp-page.php' // The 'slug' - file to display when clicking the link
     );
@@ -41,7 +41,7 @@ function mcfp_ajax_fy_Add_My_Admin_Link()
 }
 
 
-// has_cap was called with an argument… since version 2.0.0! ... --> set $cabablity = "manage_options" --> done
+// error "has_cap was called with an argument… since version 2.0.0! ..." --> set $cabablity = "manage_options" --> done
 
 function mcfp_ajax_fy_Add_My_Admin_Actions()
 {
@@ -63,172 +63,137 @@ function mcfp_ajax_fy_plugin_options() {
 
 }
 
-$response = "";
 
-//function to generate response
-function my_contact_form_generate_response($type, $reminder){
-
-    global $response;
-
-    if($type == "success") $response = "<div class='success'>{".$reminder."}</div>";
-    else $response = "<div class='error'>{".$reminder."}</div>";
-
-}
-
-
-
-function html_form_code_ajax_fy() {
+function html_form_code_ajax_fy() 
+{
 ?>
-<div id="respond">
-<!--   <php
-    echo $response; 
-  ?> -->
-  <form id="email-form" action="<?php the_permalink(); ?>" method="post">
-    <div id="ajax-response"></div>
-    <p>Các vùng có dấu (*) là bắt buộc, không được để trống.</p><br>
-    <p><label id="name-label" for="cf-name">Name: <span>*</span> <br><input type="text" name="cf-name" value="Ví dụ: Nguyễn Văn A"></label></p>
-    <p><label id="email-label" for="cf-email">Email: <span>*</span> <br><input type="text" name="cf-email" ></label></p>
-    <p><label id="message-label" for="cf-message">Message: <span>*</span> <br><textarea type="text" name="cf-message"></textarea></label></p>
-    <!-- <p><label for="message_human">Human Verification: <span>*</span> <br><input type="text" style="width: 60px;" name="message_human"> + 3 = 5</label></p> -->
-    <input type="hidden" name="cf-submitted" value="1">
-    <p><input type="submit"></p>
-  </form>
-</div>
+  <div id="respond">
+  <!--   <php
+      echo $response; 
+    ?> -->
+    <form name="ContactForm_" id="email-form" action="<?php the_permalink(); ?>" method="post">
+      <div id="ajax-response"></div>
+      <p>Các vùng có dấu (*) là bắt buộc, không được để trống.</p><br>
+      <p><label id="name-label" for="cf-name" class="info">Name: <span>*</span> <br><input type="text" name="cf-name" value="Ví dụ: Nguyễn Văn A" id="_name"></label></p>
+      <p><label id="email-label" for="cf-email" class="info">Email: <span>*</span> <br><input type="text" name="cf-email" id="_email"></label></p>
+      <p><label id="message-label" for="cf-message" class="info">Message: <span>*</span> <br><textarea type="text" name="cf-message" id="_message"></textarea></label></p>
+      <!-- <p><label for="message_human">Human Verification: <span>*</span> <br><input type="text" style="width: 60px;" name="message_human"> + 3 = 5</label></p> -->
+      <!-- <input type="hidden" name="cf-submitted" value="1"> -->
+      <!-- <p><input type="submit" id="_submit"></p> -->
+    </form>
 
-<script>
+      <style>
+        #respond {width: 60%; margin: 0 auto;}
+        #name-label, #email-label, #message-label {font-size: 1.5rem;}
+      </style>
+
+    <div class="message_box" style="margin:10px 0px;">
+  </div>
+
+  <script>
+      // jQuery(document).ready(function() {
+
+      //     jQuery('#email-form').on('submit', function(e) {
+      //         e.preventDefault();
+
+
+
+      //         jQuery.ajax({
+      //             type: jQuery(this).attr('method'),
+      //             url: jQuery(this).attr('action'),
+      //             data: jQuery(this).serialize(),
+      //             success: function(data) {
+      //                 jQuery('#ajax-response').html(data); 
+      //             }
+      //         });
+
+      //     });
+
+      // });
+  </script>
+
+  <script>
     jQuery(document).ready(function() {
 
-        jQuery('#email-form').on('submit', function(e) {
-            e.preventDefault();
+       var name = jQuery('#_name').val();
+       var email = jQuery('#_email').val();
+       var message = jQuery('#_message').val();
 
-            jQuery.ajax({
-                type: jQuery(this).attr('method'),
-                url: jQuery(this).attr('action'),
-                data: jQuery(this).serialize(),
-                success: function(data) {
-                    jQuery('#ajax-response').html(data); 
-                }
-            });
+       var delay = 2000;
 
-        });
+       jQuery('#email-form').on('submit', function(e) {
+          e.preventDefault();
 
-    });
-</script>
-
-<style>
-  #respond {width: 60%; margin: 0 auto;}
-  #name-label, #email-label, #message-label {font-size: 1.5rem;}
-</style>
-<?php
-
-  // Call to this function to operate
-  validate_deliver_mail_dn();
-
-}
-
-
-function validate_deliver_mail_ajax_fy()
-{
-    //response messages
-    $not_human       = "Human verification incorrect.";
-    $missing_content = "Please supply all information.";
-    $email_invalid   = "Email Address Invalid.";
-    // $message_unsent  = "Message was not sent. Try Again.";
-    // $message_sent    = "Thanks! Your message has been sent."; 
-    // $message_sent    = "Thanks for contacting me, expect a response soon.";
-     
-    //user posted variables
-
-    // $human = $_POST['message_human'];
-
-      // sanitize form values
-    if(!isset($_POST['cf-name']) || !isset($_POST['cf-email'])) {}
-    else
-    {
-      if(isset($_POST['cf-name']) && isset($_POST['cf-email'])) { 
-        $name    = sanitize_text_field( $_POST['cf-name'] );
-        $email    = sanitize_text_field( $_POST['cf-email'] ); 
-        // $headers = "From: $name <$email>" . "\r\n";
-        $headers = 'From: '.$name.' <'.$email.'> \r\n';
-      }
-    }
-
-    if(!isset($_POST['cf-subject'])) {/* skip */}
-    else
-    {
-      if(isset($_POST['cf-subject'])) { $subject    = sanitize_text_field( $_POST['cf-subject'] ); }
-    }
-
-    if(!isset($_POST['cf-message'])) {/* skip */}
-    else
-    {
-      if(isset($_POST['cf-message'])) { $message    = sanitize_text_field( $_POST['cf-message'] ); }
-    }
-
-    // get the blog administrator's email address
-    $to = get_option( 'admin_email' ); // good with Yahoo mail
-
-    $subject = "Someone sent a message from ".get_bloginfo('name');
-
-  // if(isset( $_POST['cf-submitted'])){
-
-
-    if(!isset($_POST['cf-email'])) {}
-    else
-    {
-      if(isset($_POST['cf-email'])) { 
-          $email    = sanitize_text_field( $_POST['cf-email'] );
-          //validate email
-          if(!filter_var($email, FILTER_VALIDATE_EMAIL))
-            my_contact_form_generate_response("error", $email_invalid);
-          else //email is valid
-          {
-            //validate presence of name and message
-              if(empty($name) || empty($message)){
-                  my_contact_form_generate_response("error", $missing_content);
-                  echo '<p style="margin: 0 auto; width: 60%;">lack of input</p>';
-              }
-              else
-              {            
-                  //send email
-                  $all_content = 'Sent from: ['.$name.'] < '.$email.' >'."\n\n";
-                  $all_content .= 'Message: '."\n".$message."\n\n";
-                  $all_content .= '---'."\n";
-                  $all_content .= 'Contact Form of website: '.get_bloginfo('wpurl');
-                  // $all_content .= "";
-                     // If email has been process for sending, display a success message
-                  // if ( wp_mail( $to, $subject, $message, $headers ) ) {
-                  if ( wp_mail( $to, $subject, $all_content, $headers ) ) {
-                      echo '<div>';
-                      echo '<p id="thank">Thanks for contacting me, expect a response soon.</p>';
-                      echo '</div>';
-
-                      echo '<style>';
-                      echo 'p#thank{margin: 0 auto; width: 60%;}';
-                      echo '</style>';
-
-                  } else {
-                      echo '<div class="container">';
-                      echo 'An unexpected error occurred';
-                      echo '</div>';
-                  }
-              }   
+          if(name == ''){
+            jQuery('#_name').html("(required)");
+            jQuery('.message_box').html('<span style="color:red;">We want to know your name!</span>');
+            jQuery('#_name').focus();
+            return false;
           }
-      }
-    }
-          
-  // }
+
+          if(email == ''){
+            jQuery('#_email').html("(required)");
+            jQuery('.message_box').html('<span style="color:red;">We want to know your email!</span>');
+            jQuery('#_email').focus();
+            return false;
+          }
+          if( jQuery("#_email").val()!='' ){
+            if( !isValidEmailAddress( jQuery("#_email").val() ) ){
+              jQuery('.message_box').html(
+              '<span style="color:red;">Provided email address is incorrect!</span>'
+              );
+              jQuery('#_email').focus();
+              return false;
+            }
+          }
+
+          if(message == ''){
+            jQuery('#_message').html("(required)");
+            jQuery('.message_box').html('<span style="color:red;">You forget to leave a message!</span>');
+            jQuery('#_message').focus();
+            return false;
+          }
+
+          jQuery.ajax({
+            type: "POST",
+            url: "deliver_mail_ajax.php",
+            data: "name="+name+"&email="+email+"&message="+message, 
+            beforeSend: function() {
+               // jQuery('.message_box').html(
+               // '<img src="Loader.gif" width="25" height="25"/>'
+               // );
+             },
+            success: function(data) {
+              setTimeout(function() {
+                 jQuery('.message_box').html(data);
+                 }, delay);
+             }
+            },
+            error: function() {}
+          // });
+        });
+     });
+
+        //Email Validation Function 
+        function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+            // var pattern2 = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+            return pattern.test(emailAddress);
+        };
+  </script>
+
+<?php
 }
 
 // Main function
-function cf_shortcode_dn() {
+function cf_shortcode_ajax_fy() {
     ob_start();
     // validate_dn();
-    html_form_code_dn();
+    html_form_code_ajax_fy();
 
     return ob_get_clean();
 }
-add_shortcode( 'sitepoint_contact_form_ajax_fy', 'cf_shortcode_dn' );
+add_shortcode( 'sitepoint_contact_form_ajax_fy', 'cf_shortcode_ajax_fy' );
 
 
 
